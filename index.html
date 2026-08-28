@@ -24,7 +24,7 @@ button.good{background:#eefaf4;color:var(--good)}.hidden{display:none!important}
 .section-title{font-size:20px;font-weight:850;margin:8px 0 12px}.grammar-list{display:grid;gap:12px}.grammar-card{padding:17px}.grammar-card h3{margin:0 0 8px;font-size:20px}
 .grammar-card p{margin:6px 0;line-height:1.65}.formula{background:var(--soft);padding:10px 12px;border-radius:12px;margin-top:9px;font-weight:700}
 .example{border-left:4px solid var(--accent);padding:8px 12px;margin-top:10px;background:#fafaff;border-radius:8px}.tag{display:inline-block;background:#f0f1f5;border-radius:999px;padding:4px 8px;font-size:12px;margin-right:5px}
-.note{font-size:12px;color:var(--muted);line-height:1.6;margin-top:16px}.feedback{min-height:26px;font-weight:800;margin-top:10px}.add-panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:13px;color:var(--muted);font-weight:700}.field input,.field textarea{width:100%;font:inherit;font-size:16px;border:1px solid var(--line);border-radius:12px;padding:11px;background:#fff;color:var(--text)}.field textarea{min-height:82px;resize:vertical}.form-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}@media(max-width:600px){.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+.note{font-size:12px;color:var(--muted);line-height:1.6;margin-top:16px}.feedback{min-height:26px;font-weight:800;margin-top:10px}.add-panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:13px;color:var(--muted);font-weight:700}.field input,.field textarea{width:100%;font:inherit;font-size:16px;border:1px solid var(--line);border-radius:12px;padding:11px;background:#fff;color:var(--text)}.field textarea{min-height:82px;resize:vertical}.form-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.lookup-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:8px}.lookup-card h4{margin:0 0 8px}.lookup-row{display:flex;gap:8px;align-items:flex-start;margin:7px 0}.lookup-row input{margin-top:4px}.lookup-meaning{min-width:0;line-height:1.5}.lookup-en{font-size:12px;color:var(--muted);margin-top:3px}@media(max-width:600px){.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
 @media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.daily-top{align-items:flex-start}.daily-word{font-size:30px}.hero{flex-direction:column}.accent-picker{align-self:flex-start}}
 </style>
 </head>
@@ -60,15 +60,7 @@ button.good{background:#eefaf4;color:var(--good)}.hidden{display:none!important}
 </nav>
 
 <section id="words" class="view">
-  <div class="controls" style="margin-bottom:12px">
-    <button id="addWordBtn" class="primary">＋ 新增單字</button>
-    <button id="playAll">▶ 全部朗讀</button>
-    <button id="stopAll">■ 停止</button>
-    <button id="importBtn">📥 匯入資料</button>
-    <button id="exportBtn">📤 備份資料</button>
-    <input id="importFile" type="file" accept="application/json,.json" class="hidden">
-  </div>
-
+  <div class="controls" style="margin-bottom:12px"><button id="addWordBtn" class="primary">＋ 新增單字</button><button id="playAll">▶ 全部朗讀</button><button id="stopAll">■ 停止</button><button id="importBtn">📥 匯入資料</button><button id="exportBtn">📤 備份資料</button><input id="importFile" type="file" accept="application/json,.json" class="hidden"></div>
   <div id="wordForm" class="add-panel hidden">
     <div class="section-title">＋ 新增單字</div>
     <div class="form-grid">
@@ -78,21 +70,22 @@ button.good{background:#eefaf4;color:var(--good)}.hidden{display:none!important}
       <div class="field full"><label for="newExtra">補充／其他意思</label><textarea id="newExtra" placeholder="例如: improve skills = 提升技能"></textarea></div>
     </div>
     <div class="form-actions">
+      <button id="lookupWord">🔍 自動查單字</button>
       <button id="previewWord">🔊 試聽英文</button>
+      <button id="checkWord">✅ 免費檢查</button>
+      <button id="chatgptWord">🤖 給 ChatGPT 檢查</button>
       <button id="saveWord" class="primary">儲存單字</button>
       <button id="cancelWord">取消</button>
     </div>
+    <div id="wordLookupStatus" class="feedback"></div>
+    <div id="wordLookupResults" class="grammar-list"></div>
+    <div id="wordCheckResult" class="feedback"></div>
   </div>
-
   <div id="wordList" class="grid"></div>
 </section>
 
 <section id="grammar" class="view hidden">
-  <div class="controls" style="margin-bottom:12px">
-    <button id="addGrammarBtn" class="primary">＋ 新增文法</button>
-    <button id="stopGrammar">■ 停止朗讀</button>
-  </div>
-
+  <div class="controls" style="margin-bottom:12px"><button id="addGrammarBtn" class="primary">＋ 新增文法</button><button id="stopGrammar">■ 停止朗讀</button></div>
   <div id="grammarForm" class="add-panel hidden">
     <div class="section-title">＋ 新增文法</div>
     <div class="form-grid">
@@ -102,20 +95,23 @@ button.good{background:#eefaf4;color:var(--good)}.hidden{display:none!important}
       <div class="field full"><label for="newGExample">例句</label><textarea id="newGExample" placeholder="例如: I have finished my homework."></textarea></div>
     </div>
     <div class="form-actions">
+      <button id="lookupGrammar">🔍 自動查文法</button>
       <button id="previewGrammar">🔊 試聽文法</button>
+      <button id="checkGrammar">✅ 免費檢查</button>
+      <button id="chatgptGrammar">🤖 給 ChatGPT 檢查</button>
       <button id="saveGrammar" class="primary">儲存文法</button>
       <button id="cancelGrammar">取消</button>
     </div>
+    <div id="grammarLookupStatus" class="feedback"></div>
+    <div id="grammarLookupResults" class="grammar-list"></div>
+    <div id="grammarCheckResult" class="feedback"></div>
   </div>
-
-  <div class="section-title">你的筆記：文法重點</div>
-  <div id="grammarList" class="grammar-list"></div>
+  <div class="section-title">你的筆記：文法重點</div><div id="grammarList" class="grammar-list"></div>
 </section>
 
 <section id="quiz" class="view hidden">
   <div class="panel">
-    <div class="muted">這個英文是什麼意思？</div>
-    <div id="quizWord" class="big"></div>
+    <div class="muted">這個英文是什麼意思？</div><div id="quizWord" class="big"></div>
     <button id="quizSpeak">🔊 聽發音</button>
     <div id="quizOptions" style="display:grid;gap:8px;margin-top:14px"></div>
     <div id="quizFeedback" class="feedback"></div>
@@ -123,12 +119,8 @@ button.good{background:#eefaf4;color:var(--good)}.hidden{display:none!important}
   </div>
 </section>
 
-<section id="favorites" class="view hidden">
-  <div class="section-title">我的收藏</div>
-  <div id="favoritesList" class="grid"></div>
-</section>
-
-<div class="note">上方可隨時切換 🇬🇧 英國腔 / 🇺🇸 美國腔。可直接按「＋ 新增單字」或「＋ 新增文法」；新增內容會保存在這台裝置的瀏覽器中，也可用「📤 備份資料」備份。</div>
+<section id="favorites" class="view hidden"><div class="section-title">我的收藏</div><div id="favoritesList" class="grid"></div></section>
+<div class="note">上方可隨時切換 🇬🇧 英國腔 / 🇺🇸 美國腔。可直接新增單字或文法，使用「✅ 免費檢查」先檢查格式，或按「🤖 給 ChatGPT 檢查」做更完整的語意與文法確認。單字與文法都可以新增、編輯、刪除；新增單字時可按「🔍 自動查單字」查詞性與常見意思；新增文法時可按「🔍 自動查文法」取得解釋、公式和多個例句。修改內容會保存在這台裝置的瀏覽器中，也可用「📤 備份資料」備份。</div>
 </main>
 
 <script>
@@ -165,72 +157,51 @@ const baseGrammar=[
 {title:'一般動詞 Action Verb',tags:['一般動詞'],body:'一般動詞通常表示實際動作或行為，例如工作、吃、跑、管理。',formula:'主詞 + 一般動詞',example:'She supervises employees.'}
 ];
 
-const customWords=JSON.parse(localStorage.getItem('customWords3')||'[]');
-const customGrammar=JSON.parse(localStorage.getItem('customGrammar3')||'[]');
-let words=[...baseWords,...customWords];
-let grammar=[...baseGrammar,...customGrammar];
+
+let savedWords=JSON.parse(localStorage.getItem('allWords4')||'null');
+let savedGrammar=JSON.parse(localStorage.getItem('allGrammar4')||'null');
+
+let words=Array.isArray(savedWords)?savedWords:[...baseWords, ...JSON.parse(localStorage.getItem('customWords3')||'[]')];
+let grammar=Array.isArray(savedGrammar)?savedGrammar:[...baseGrammar, ...JSON.parse(localStorage.getItem('customGrammar3')||'[]')];
+
+function saveAllData(){
+  localStorage.setItem('allWords4',JSON.stringify(words));
+  localStorage.setItem('allGrammar4',JSON.stringify(grammar));
+}
 
 function saveCustomData(){
-  localStorage.setItem('customWords3',JSON.stringify(customWords));
-  localStorage.setItem('customGrammar3',JSON.stringify(customGrammar));
-  words=[...baseWords,...customWords];
-  grammar=[...baseGrammar,...customGrammar];
+  saveAllData();
 }
 
 const $=s=>document.querySelector(s);
 const loadSet=k=>new Set(JSON.parse(localStorage.getItem(k)||'[]'));
-
 const state={
   known:loadSet('known3'),
   fav:loadSet('fav3'),
   accent:localStorage.getItem('accent3')||'en-GB'
 };
 
-function accentName(){
-  return state.accent==='en-US'?'🇺🇸 美國腔':'🇬🇧 英國腔';
-}
-
-function save(){
-  localStorage.setItem('known3',JSON.stringify([...state.known]));
-  localStorage.setItem('fav3',JSON.stringify([...state.fav]));
-  localStorage.setItem('accent3',state.accent);
-}
-
+function accentName(){return state.accent==='en-US'?'🇺🇸 美國腔':'🇬🇧 英國腔'}
+function save(){localStorage.setItem('known3',JSON.stringify([...state.known]));localStorage.setItem('fav3',JSON.stringify([...state.fav]));localStorage.setItem('accent3',state.accent)}
 function setAccent(accent){
   speechSynthesis.cancel();
-  state.accent=accent;
-  save();
+  state.accent=accent;save();
   $('#ukBtn').classList.toggle('active',accent==='en-GB');
   $('#usBtn').classList.toggle('active',accent==='en-US');
-  renderWords();
-  renderFav();
+  renderWords();renderFav();
   $('#quizSpeak').textContent='🔊 '+accentName();
 }
 
 function speak(text,lang=null,rate=.72){
   return new Promise(resolve=>{
-    if(!('speechSynthesis' in window)){
-      resolve();
-      return;
-    }
-
+    if(!('speechSynthesis' in window)){resolve();return}
     const actualLang=lang||state.accent;
     const u=new SpeechSynthesisUtterance(text);
-    u.lang=actualLang;
-    u.rate=rate;
-
+    u.lang=actualLang;u.rate=rate;
     const voices=speechSynthesis.getVoices();
-    const target=voices.find(v=>
-      v.lang &&
-      v.lang.toLowerCase().startsWith(actualLang.toLowerCase())
-    );
-
+    const target=voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith(actualLang.toLowerCase()));
     if(target)u.voice=target;
-
-    u.onend=resolve;
-    u.onerror=resolve;
-
-    speechSynthesis.speak(u);
+    u.onend=resolve;u.onerror=resolve;speechSynthesis.speak(u);
   });
 }
 
@@ -242,94 +213,34 @@ async function speakFull(w){
 }
 
 function updateStats(){
-  $('#totalCount').textContent=words.length;
-  $('#knownCount').textContent=state.known.size;
-  $('#favCount').textContent=state.fav.size;
-  $('#grammarCount').textContent=grammar.length;
+  $('#totalCount').textContent=words.length;$('#knownCount').textContent=state.known.size;
+  $('#favCount').textContent=state.fav.size;$('#grammarCount').textContent=grammar.length;
 }
 
 function wordCard(w,i){
-  return `
-  <article class="card">
-    <button class="full" data-i="${i}" style="width:100%;text-align:left;border:0;padding:0;background:transparent">
-      <div class="word">${w.en}</div>
-      <div class="pos">${w.pos}</div>
-      <div class="zh">${w.zh}</div>
-      <div class="extra">${w.extra}</div>
-    </button>
-
-    <div class="actions">
-      <button class="speak" data-i="${i}">🔊 ${accentName()}</button>
-      <button class="fav" data-i="${i}">${state.fav.has(i)?'★ 已收藏':'☆ 收藏'}</button>
-      <button class="known ${state.known.has(i)?'good':''}" data-i="${i}">${state.known.has(i)?'✓ 已熟悉':'○ 還在學'}</button>
-    </div>
-  </article>`;
+  return `<article class="card">
+  <button class="full" data-i="${i}" style="width:100%;text-align:left;border:0;padding:0;background:transparent">
+  <div class="word">${w.en}</div><div class="pos">${w.pos}</div><div class="zh">${w.zh}</div><div class="extra">${w.extra}</div></button>
+  <div class="actions"><button class="speak" data-i="${i}">🔊 ${accentName()}</button>
+  <button class="fav" data-i="${i}">${state.fav.has(i)?'★ 已收藏':'☆ 收藏'}</button>
+  <button class="known ${state.known.has(i)?'good':''}" data-i="${i}">${state.known.has(i)?'✓ 已熟悉':'○ 還在學'}</button></div></article>`;
 }
 
 function bind(box){
-  box.querySelectorAll('.full').forEach(b=>{
-    b.onclick=()=>speakFull(words[+b.dataset.i]);
-  });
-
-  box.querySelectorAll('.speak').forEach(b=>{
-    b.onclick=()=>{
-      speechSynthesis.cancel();
-      speak(words[+b.dataset.i].en,state.accent,.68);
-    };
-  });
-
-  box.querySelectorAll('.fav').forEach(b=>{
-    b.onclick=()=>{
-      const i=+b.dataset.i;
-      state.fav.has(i)?state.fav.delete(i):state.fav.add(i);
-      save();
-      render();
-    };
-  });
-
-  box.querySelectorAll('.known').forEach(b=>{
-    b.onclick=()=>{
-      const i=+b.dataset.i;
-      state.known.has(i)?state.known.delete(i):state.known.add(i);
-      save();
-      render();
-    };
-  });
+  box.querySelectorAll('.full').forEach(b=>b.onclick=()=>speakFull(words[+b.dataset.i]));
+  box.querySelectorAll('.speak').forEach(b=>b.onclick=()=>{speechSynthesis.cancel();speak(words[+b.dataset.i].en,state.accent,.68)});
+  box.querySelectorAll('.fav').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;state.fav.has(i)?state.fav.delete(i):state.fav.add(i);save();render()});
+  box.querySelectorAll('.known').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;state.known.has(i)?state.known.delete(i):state.known.add(i);save();render()});
 }
-
-function renderWords(){
-  const b=$('#wordList');
-  b.innerHTML=words.map(wordCard).join('');
-  bind(b);
-}
-
-function renderFav(){
-  const ids=[...state.fav];
-  const b=$('#favoritesList');
-
-  b.innerHTML=ids.length
-    ?ids.map(i=>wordCard(words[i],i)).join('')
-    :'<div class="panel muted">還沒有收藏單字。</div>';
-
-  bind(b);
-}
-
+function renderWords(){const b=$('#wordList');b.innerHTML=words.map(wordCard).join('');bind(b)}
+function renderFav(){const ids=[...state.fav],b=$('#favoritesList');b.innerHTML=ids.length?ids.map(i=>wordCard(words[i],i)).join(''):'<div class="panel muted">還沒有收藏單字。</div>';bind(b)}
 async function speakMixed(text){
   const parts=String(text||'').match(/[A-Za-z][A-Za-z0-9'’.,!?/()+\- ]*|[^A-Za-z]+/g)||[];
-
   for(const part of parts){
-    if(!part.trim())continue;
-
-    const isEnglish=/[A-Za-z]/.test(part);
-
-    await speak(
-      part,
-      isEnglish?state.accent:'zh-TW',
-      isEnglish?.7:.88
-    );
+    if(!part.trim()) continue;
+    await speak(part,/[A-Za-z]/.test(part)?state.accent:'zh-TW',/[A-Za-z]/.test(part)?.7:.88);
   }
 }
-
 async function speakGrammarAll(g){
   speechSynthesis.cancel();
   await speakMixed(g.title);
@@ -337,397 +248,826 @@ async function speakGrammarAll(g){
   await speakMixed(g.formula);
   await speakMixed(g.example);
 }
-
 function renderGrammar(){
-  $('#grammarList').innerHTML=grammar.map((g,i)=>`
-    <article class="grammar-card">
-      <h3>${g.title}</h3>
-
-      <div>
-        ${g.tags.map(t=>`<span class="tag">${t}</span>`).join('')}
-      </div>
-
-      <p>${g.body}</p>
-
-      <div class="formula">${g.formula}</div>
-
-      <div class="example">
-        <b>例：</b>${g.example}
-      </div>
-
-      <div class="actions" style="margin-top:12px">
-        <button class="g-title" data-i="${i}">🔊 標題</button>
-        <button class="g-formula" data-i="${i}">🔊 公式</button>
-        <button class="g-example" data-i="${i}">🔊 例句</button>
-        <button class="g-all" data-i="${i}">▶ 全部朗讀</button>
-      </div>
-    </article>
-  `).join('');
-
-  $('#grammarList').querySelectorAll('.g-title').forEach(b=>{
-    b.onclick=()=>{
-      speechSynthesis.cancel();
-      speakMixed(grammar[+b.dataset.i].title);
-    };
-  });
-
-  $('#grammarList').querySelectorAll('.g-formula').forEach(b=>{
-    b.onclick=()=>{
-      speechSynthesis.cancel();
-      speakMixed(grammar[+b.dataset.i].formula);
-    };
-  });
-
-  $('#grammarList').querySelectorAll('.g-example').forEach(b=>{
-    b.onclick=()=>{
-      speechSynthesis.cancel();
-      speakMixed(grammar[+b.dataset.i].example);
-    };
-  });
-
-  $('#grammarList').querySelectorAll('.g-all').forEach(b=>{
-    b.onclick=()=>speakGrammarAll(grammar[+b.dataset.i]);
-  });
+  $('#grammarList').innerHTML=grammar.map((g,i)=>`<article class="grammar-card">
+    <h3>${g.title}</h3>
+    <div>${g.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    <p>${g.body}</p>
+    <div class="formula">${g.formula}</div>
+    <div class="example"><b>例：</b>${g.example}</div>
+    <div class="actions" style="margin-top:12px">
+      <button class="g-title" data-i="${i}">🔊 標題</button>
+      <button class="g-formula" data-i="${i}">🔊 公式</button>
+      <button class="g-example" data-i="${i}">🔊 例句</button>
+      <button class="g-all" data-i="${i}">▶ 全部朗讀</button>
+    </div>
+  </article>`).join('');
+  $('#grammarList').querySelectorAll('.g-title').forEach(b=>b.onclick=()=>{speechSynthesis.cancel();speakMixed(grammar[+b.dataset.i].title)});
+  $('#grammarList').querySelectorAll('.g-formula').forEach(b=>b.onclick=()=>{speechSynthesis.cancel();speakMixed(grammar[+b.dataset.i].formula)});
+  $('#grammarList').querySelectorAll('.g-example').forEach(b=>b.onclick=()=>{speechSynthesis.cancel();speakMixed(grammar[+b.dataset.i].example)});
+  $('#grammarList').querySelectorAll('.g-all').forEach(b=>b.onclick=()=>speakGrammarAll(grammar[+b.dataset.i]));
 }
-
-function daily(){
-  const d=new Date();
-
-  const i=(
-    d.getFullYear()*10000+
-    (d.getMonth()+1)*100+
-    d.getDate()
-  )%words.length;
-
-  const w=words[i];
-
-  $('#dailyWord').textContent=w.en;
-  $('#dailyPos').textContent=w.pos;
-  $('#dailyZh').textContent=w.zh;
-  $('#dailyExtra').textContent=w.extra;
-  $('#dailySpeak').onclick=()=>speakFull(w);
-}
-
+function daily(){const d=new Date(),i=(d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate())%words.length,w=words[i];$('#dailyWord').textContent=w.en;$('#dailyPos').textContent=w.pos;$('#dailyZh').textContent=w.zh;$('#dailyExtra').textContent=w.extra;$('#dailySpeak').onclick=()=>speakFull(w)}
 function quiz(){
-  const correct=Math.floor(Math.random()*words.length);
-  const w=words[correct];
-
-  $('#quizWord').textContent=w.en;
-  $('#quizFeedback').textContent='';
+  const correct=Math.floor(Math.random()*words.length),w=words[correct];$('#quizWord').textContent=w.en;$('#quizFeedback').textContent='';
   $('#quizSpeak').textContent='🔊 '+accentName();
-
-  let ids=[correct];
-
-  while(ids.length<4){
-    let x=Math.floor(Math.random()*words.length);
-    if(!ids.includes(x))ids.push(x);
-  }
-
-  ids.sort(()=>Math.random()-.5);
-
-  $('#quizOptions').innerHTML=
-    ids.map(i=>`<button data-i="${i}">${words[i].zh}</button>`).join('');
-
-  let answered=false;
-
-  $('#quizOptions').querySelectorAll('button').forEach(b=>{
-    b.onclick=()=>{
-      if(answered)return;
-
-      answered=true;
-
-      $('#quizFeedback').textContent=
-        (+b.dataset.i===correct)
-        ?'✅ 答對了！'
-        :'❌ 正確答案：'+w.zh;
-    };
-  });
-
-  $('#quizSpeak').onclick=()=>{
-    speechSynthesis.cancel();
-    speak(w.en,state.accent,.68);
-  };
+  let ids=[correct];while(ids.length<4){let x=Math.floor(Math.random()*words.length);if(!ids.includes(x))ids.push(x)}ids.sort(()=>Math.random()-.5);
+  $('#quizOptions').innerHTML=ids.map(i=>`<button data-i="${i}">${words[i].zh}</button>`).join('');
+  let answered=false;$('#quizOptions').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(answered)return;answered=true;$('#quizFeedback').textContent=(+b.dataset.i===correct)?'✅ 答對了！':'❌ 正確答案：'+w.zh});
+  $('#quizSpeak').onclick=()=>{speechSynthesis.cancel();speak(w.en,state.accent,.68)};
 }
+function render(){updateStats();renderWords();renderFav();renderGrammar();daily();setAccentVisual()}
+function setAccentVisual(){$('#ukBtn').classList.toggle('active',state.accent==='en-GB');$('#usBtn').classList.toggle('active',state.accent==='en-US')}
 
-function render(){
-  updateStats();
-  renderWords();
-  renderFav();
-  renderGrammar();
-  daily();
-  setAccentVisual();
-}
-
-function setAccentVisual(){
-  $('#ukBtn').classList.toggle('active',state.accent==='en-GB');
-  $('#usBtn').classList.toggle('active',state.accent==='en-US');
-}
-
-document.querySelectorAll('.tab').forEach(b=>{
-  b.onclick=()=>{
-    document.querySelectorAll('.tab').forEach(x=>{
-      x.classList.remove('active');
-    });
-
-    b.classList.add('active');
-
-    document.querySelectorAll('.view').forEach(v=>{
-      v.classList.add('hidden');
-    });
-
-    $('#'+b.dataset.tab).classList.remove('hidden');
-
-    if(b.dataset.tab==='quiz'){
-      quiz();
-    }
-  };
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));$('#'+b.dataset.tab).classList.remove('hidden');
+  if(b.dataset.tab==='quiz')quiz();
 });
-
 $('#ukBtn').onclick=()=>setAccent('en-GB');
 $('#usBtn').onclick=()=>setAccent('en-US');
-
-$('#playAll').onclick=async()=>{
-  speechSynthesis.cancel();
-
-  for(const w of words){
-    await speak(w.en,state.accent,.66);
-  }
-};
-
-$('#stopAll').onclick=()=>{
-  speechSynthesis.cancel();
-};
-
+$('#playAll').onclick=async()=>{speechSynthesis.cancel();for(const w of words)await speak(w.en,state.accent,.66)};
+$('#stopAll').onclick=()=>speechSynthesis.cancel();
 $('#nextQuiz').onclick=quiz;
 
-function toggleForm(id,show){
-  $(id).classList.toggle('hidden',!show);
+
+function toggleForm(id,show){$(id).classList.toggle('hidden',!show)}
+$('#addWordBtn').onclick=()=>{toggleForm('#wordForm',true);$('#newEn').focus()};
+$('#cancelWord').onclick=()=>toggleForm('#wordForm',false);
+$('#previewWord').onclick=()=>{const t=$('#newEn').value.trim();if(t){speechSynthesis.cancel();speak(t,state.accent,.68)}};
+$('#saveWord').onclick=()=>{
+  const en=$('#newEn').value.trim(), zh=$('#newZh').value.trim();
+  if(!en||!zh){alert('請至少填寫英文和中文意思。');return}
+  if(words.some(w=>w.en.toLowerCase()===en.toLowerCase())){alert('這個單字已經存在。');return}
+  words.push({en,pos:$('#newPos').value.trim(),zh,extra:$('#newExtra').value.trim()});
+  saveCustomData();
+  ['#newEn','#newPos','#newZh','#newExtra'].forEach(id=>$(id).value='');
+  toggleForm('#wordForm',false);render();
+  alert('✅ 單字已新增！');
+};
+$('#addGrammarBtn').onclick=()=>{toggleForm('#grammarForm',true);$('#newGTitle').focus()};
+$('#cancelGrammar').onclick=()=>toggleForm('#grammarForm',false);
+$('#stopGrammar').onclick=()=>speechSynthesis.cancel();
+$('#previewGrammar').onclick=()=>{
+  const g={title:$('#newGTitle').value.trim(),body:$('#newGBody').value.trim(),formula:$('#newGFormula').value.trim(),example:$('#newGExample').value.trim()};
+  if(g.title||g.body||g.formula||g.example) speakGrammarAll(g);
+};
+$('#saveGrammar').onclick=()=>{
+  const title=$('#newGTitle').value.trim();
+  if(!title){alert('請填寫文法標題。');return}
+  if(grammar.some(g=>g.title===title)){alert('這個文法標題已經存在。');return}
+  grammar.push({title,tags:['自訂'],body:$('#newGBody').value.trim(),formula:$('#newGFormula').value.trim(),example:$('#newGExample').value.trim()});
+  saveCustomData();
+  ['#newGTitle','#newGBody','#newGFormula','#newGExample'].forEach(id=>$(id).value='');
+  toggleForm('#grammarForm',false);render();
+  alert('✅ 文法已新增！');
+};
+
+
+function copyTextFallback(text){
+  const ta=document.createElement('textarea');
+  ta.value=text;
+  ta.style.position='fixed';
+  ta.style.opacity='0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try{document.execCommand('copy');}catch(e){}
+  ta.remove();
 }
 
-$('#addWordBtn').onclick=()=>{
-  toggleForm('#wordForm',true);
-  $('#newEn').focus();
-};
-
-$('#cancelWord').onclick=()=>{
-  toggleForm('#wordForm',false);
-};
-
-$('#previewWord').onclick=()=>{
-  const t=$('#newEn').value.trim();
-
-  if(t){
-    speechSynthesis.cancel();
-    speak(t,state.accent,.68);
+async function copyAndOpenChatGPT(text){
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+    }else{
+      copyTextFallback(text);
+    }
+  }catch(e){
+    copyTextFallback(text);
   }
+  window.open('https://chatgpt.com/','_blank');
+  alert('✅ 我已幫你整理並複製檢查內容。ChatGPT 已開啟，貼上後送出即可。');
+}
+
+
+const posMap={
+  noun:'名詞 n.',
+  verb:'動詞 v.',
+  adjective:'形容詞 adj.',
+  adverb:'副詞 adv.',
+  pronoun:'代名詞 pron.',
+  preposition:'介系詞 prep.',
+  conjunction:'連接詞 conj.',
+  interjection:'感嘆詞 interj.',
+  determiner:'限定詞 det.',
+  exclamation:'感嘆詞'
 };
 
-$('#saveWord').onclick=()=>{
-  const en=$('#newEn').value.trim();
-  const zh=$('#newZh').value.trim();
+async function translateToZhTW(text){
+  const url='https://api.mymemory.translated.net/get?q='
+    +encodeURIComponent(text)
+    +'&langpair=en|zh-TW';
 
-  if(!en||!zh){
-    alert('請至少填寫英文和中文意思。');
+  const r=await fetch(url);
+
+  if(!r.ok){
+    throw new Error('translation_failed');
+  }
+
+  const data=await r.json();
+
+  return (
+    data?.responseData?.translatedText
+    ||''
+  ).trim();
+}
+
+function escapeHtml(s){
+  return String(s??'')
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
+}
+
+$('#lookupWord').onclick=async()=>{
+  const word=$('#newEn').value.trim();
+
+  if(!word){
+    alert('請先輸入英文單字。');
     return;
   }
 
-  if(words.some(w=>w.en.toLowerCase()===en.toLowerCase())){
+  $('#wordLookupStatus').textContent='🔎 查詢中…';
+  $('#wordLookupResults').innerHTML='';
+
+  try{
+    const r=await fetch(
+      'https://api.dictionaryapi.dev/api/v2/entries/en/'
+      +encodeURIComponent(word)
+    );
+
+    if(!r.ok){
+      throw new Error('not_found');
+    }
+
+    const data=await r.json();
+
+    const meanings=[];
+
+    for(const entry of data){
+      for(const meaning of (entry.meanings||[])){
+        const pos=meaning.partOfSpeech||'';
+        for(const def of (meaning.definitions||[]).slice(0,3)){
+          if(def.definition){
+            meanings.push({
+              pos,
+              definition:def.definition,
+              example:def.example||''
+            });
+          }
+        }
+      }
+    }
+
+    if(!meanings.length){
+      throw new Error('not_found');
+    }
+
+    const unique=[];
+    const seen=new Set();
+
+    for(const m of meanings){
+      const key=m.pos+'|'+m.definition;
+      if(!seen.has(key)){
+        seen.add(key);
+        unique.push(m);
+      }
+      if(unique.length>=8)break;
+    }
+
+    const translated=[];
+
+    for(const m of unique){
+      let zh='';
+
+      try{
+        zh=await translateToZhTW(m.definition);
+      }catch(e){
+        zh='';
+      }
+
+      translated.push({...m,zh});
+    }
+
+    const grouped={};
+
+    translated.forEach((m,idx)=>{
+      const p=m.pos||'other';
+      if(!grouped[p])grouped[p]=[];
+      grouped[p].push({...m,idx});
+    });
+
+    $('#wordLookupResults').innerHTML=
+      Object.entries(grouped).map(([pos,items])=>`
+        <div class="lookup-card">
+          <h4>${escapeHtml(posMap[pos]||pos)}</h4>
+          ${items.map(item=>`
+            <label class="lookup-row">
+              <input type="checkbox"
+                     class="lookup-choice"
+                     data-pos="${escapeHtml(posMap[pos]||pos)}"
+                     data-zh="${escapeHtml(item.zh||item.definition)}"
+                     data-en="${escapeHtml(item.definition)}"
+                     data-example="${escapeHtml(item.example||'')}">
+              <span class="lookup-meaning">
+                <b>${escapeHtml(item.zh||'暫時無中文翻譯')}</b>
+                <div class="lookup-en">${escapeHtml(item.definition)}</div>
+                ${item.example?`<div class="lookup-en">例：${escapeHtml(item.example)}</div>`:''}
+              </span>
+            </label>
+          `).join('')}
+        </div>
+      `).join('')+
+      `<div class="form-actions">
+         <button id="applyLookup" type="button">✅ 套用勾選內容</button>
+       </div>`;
+
+    $('#wordLookupStatus').textContent=
+      '✅ 查到了。請勾選你要保留的意思，再按「套用勾選內容」。';
+
+    $('#applyLookup').onclick=()=>{
+      const checked=[
+        ...document.querySelectorAll('.lookup-choice:checked')
+      ];
+
+      if(!checked.length){
+        alert('請先勾選至少一個意思。');
+        return;
+      }
+
+      const posValues=[...new Set(
+        checked.map(x=>x.dataset.pos).filter(Boolean)
+      )];
+
+      const zhValues=[...new Set(
+        checked.map(x=>x.dataset.zh).filter(Boolean)
+      )];
+
+      const extras=checked.map(x=>{
+        const bits=[];
+        if(x.dataset.en)bits.push(x.dataset.en);
+        if(x.dataset.example)bits.push('例：'+x.dataset.example);
+        return bits.join('；');
+      }).filter(Boolean);
+
+      $('#newPos').value=posValues.join('／');
+      $('#newZh').value=zhValues.join('；');
+      $('#newExtra').value=extras.join('\n');
+
+      $('#wordLookupStatus').textContent=
+        '✅ 已套用到詞性、中文意思和補充欄位。建議儲存前再按「🤖 給 ChatGPT 檢查」做最後確認。';
+    };
+
+  }catch(err){
+    $('#wordLookupStatus').textContent=
+      '❌ 查不到這個單字，或免費字典服務暫時無法使用。你仍可以手動輸入。';
+  }
+};
+
+
+function basicWordCheck(){
+  const en=$('#newEn').value.trim();
+  const pos=$('#newPos').value.trim();
+  const zh=$('#newZh').value.trim();
+  const extra=$('#newExtra').value.trim();
+  const problems=[];
+
+  if(!en) problems.push('請填英文單字。');
+  if(en && !/^[A-Za-z][A-Za-z'’ -]*$/.test(en)) problems.push('英文欄位看起來含有非英文字符，請確認拼字。');
+  if(!zh) problems.push('請填中文意思。');
+  if(!pos) problems.push('尚未填詞性。');
+  if(en && words.some(w=>w.en.toLowerCase()===en.toLowerCase())) problems.push('這個單字已經存在。');
+
+  $('#wordCheckResult').textContent = problems.length
+    ? '⚠️ ' + problems.join(' ')
+    : '✅ 基本格式看起來沒問題。中文意思、詞性是否完全正確，仍建議用 ChatGPT 再確認。';
+}
+
+
+const grammarLibrary=[
+  {
+    keys:['present simple','simple present','現在簡單式','現在式'],
+    title:'現在簡單式 Present Simple',
+    body:'用來表示習慣、固定事實、一般狀態或規律發生的事情。',
+    formula:'肯定：S + V(s/es)｜否定：S + do/does not + V｜疑問：Do/Does + S + V?',
+    examples:[
+      'I go to school every day.',
+      'She works in Taipei.',
+      'He does not like coffee.',
+      'Do you play tennis?',
+      'The sun rises in the east.'
+    ],
+    tips:'第三人稱單數主詞 he / she / it 後面的動詞通常要加 s 或 es。'
+  },
+  {
+    keys:['present continuous','present progressive','現在進行式'],
+    title:'現在進行式 Present Continuous',
+    body:'用來表示現在正在進行的動作，或暫時性的情況。',
+    formula:'S + am / is / are + V-ing',
+    examples:[
+      'I am studying English now.',
+      'She is talking on the phone.',
+      'They are watching a movie.',
+      'We are staying at a hotel this week.',
+      'He is not working today.'
+    ],
+    tips:'現在進行式通常搭配 now、right now、at the moment。'
+  },
+  {
+    keys:['past simple','simple past','過去簡單式','過去式'],
+    title:'過去簡單式 Past Simple',
+    body:'用來表示過去某個時間已經完成的動作或狀態。',
+    formula:'肯定：S + V-ed / 不規則過去式｜否定：S + did not + V｜疑問：Did + S + V?',
+    examples:[
+      'I visited Paris last year.',
+      'She went home early.',
+      'They did not see the message.',
+      'Did you call him yesterday?',
+      'We studied together last night.'
+    ],
+    tips:'did 後面的動詞要用原形，不要再用過去式。'
+  },
+  {
+    keys:['present perfect','現在完成式'],
+    title:'現在完成式 Present Perfect',
+    body:'用來表示過去發生但和現在有關的事情、經驗，或從過去持續到現在的狀態。',
+    formula:'S + have / has + past participle (p.p.)',
+    examples:[
+      'I have finished my homework.',
+      'She has lived here for five years.',
+      'Have you ever been to France?',
+      'They have already eaten dinner.',
+      'He has not called me yet.'
+    ],
+    tips:'常和 already、yet、ever、never、for、since 一起使用。'
+  },
+  {
+    keys:['future simple','simple future','未來式','未來簡單式'],
+    title:'未來簡單式 Future Simple',
+    body:'用來表示未來的預測、臨時決定、承諾或未來會發生的事情。',
+    formula:'S + will + V',
+    examples:[
+      'I will call you later.',
+      'She will be here tomorrow.',
+      'I think it will rain.',
+      'We will help you.',
+      'Will you come with us?'
+    ],
+    tips:'will 後面的動詞永遠用原形。'
+  },
+  {
+    keys:['countable nouns','countable noun','可數名詞'],
+    title:'可數名詞 Countable Nouns',
+    body:'可以一個、兩個、三個數出來的名詞，有單數和複數形式。',
+    formula:'單數：a / an + noun｜複數：noun + s / es',
+    examples:[
+      'I have a book.',
+      'She bought two apples.',
+      'There are three employees in the office.',
+      'He needs an umbrella.',
+      'These chairs are new.'
+    ],
+    tips:'單數可數名詞通常不能單獨出現，前面常需要 a、an、the 或其他限定詞。'
+  },
+  {
+    keys:['uncountable nouns','uncountable noun','不可數名詞'],
+    title:'不可數名詞 Uncountable Nouns',
+    body:'一般不能直接用數字計算的名詞，通常沒有複數形式。',
+    formula:'some / much / a little + uncountable noun',
+    examples:[
+      'I need some water.',
+      'She gave me useful information.',
+      'We do not have much time.',
+      'There is a little milk left.',
+      'This furniture is expensive.'
+    ],
+    tips:'information、advice、furniture 等常見不可數名詞不能直接加 s。'
+  },
+  {
+    keys:['transitive verb','及物動詞'],
+    title:'及物動詞 Transitive Verb',
+    body:'及物動詞後面可以直接接受詞，動作會作用在某個人或事物上。',
+    formula:'S + transitive verb + O',
+    examples:[
+      'She supervises employees.',
+      'I bought a new phone.',
+      'He opened the door.',
+      'They discussed the problem.',
+      'We need more time.'
+    ],
+    tips:'如果動詞後面能直接回答「什麼？」或「誰？」通常就是及物用法。'
+  },
+  {
+    keys:['intransitive verb','不及物動詞'],
+    title:'不及物動詞 Intransitive Verb',
+    body:'不及物動詞後面不能直接接受詞，若要接其他資訊通常需要介系詞。',
+    formula:'S + intransitive verb',
+    examples:[
+      'The accident occurred yesterday.',
+      'He arrived late.',
+      'The baby slept peacefully.',
+      'She laughed loudly.',
+      'They went home.'
+    ],
+    tips:'例如 arrive at/in、listen to 等，後面通常需要介系詞再接名詞。'
+  },
+  {
+    keys:['linking verb','連綴動詞'],
+    title:'連綴動詞 Linking Verb',
+    body:'連綴動詞連接主詞和主詞補語，用來描述主詞的狀態或變化。',
+    formula:'S + linking verb + subject complement',
+    examples:[
+      'She is beautiful.',
+      'He seems tired.',
+      'The soup tastes good.',
+      'They became friends.',
+      'You look happy today.'
+    ],
+    tips:'常見連綴動詞有 be、seem、become、look、feel、sound、taste、smell。'
+  },
+  {
+    keys:['subject complement','主詞補語'],
+    title:'主詞補語 Subject Complement',
+    body:'主詞補語放在連綴動詞後面，用來補充說明主詞是誰、是什麼或怎麼樣。',
+    formula:'S + linking verb + subject complement',
+    examples:[
+      'She is a doctor.',
+      'He looks tired.',
+      'The weather became cold.',
+      'My dream is to travel the world.',
+      'This idea sounds great.'
+    ],
+    tips:'主詞補語常由形容詞或名詞擔任。'
+  },
+  {
+    keys:['adjective','形容詞'],
+    title:'形容詞 Adjective',
+    body:'形容詞用來描述名詞，也可以放在連綴動詞後面描述主詞。',
+    formula:'adjective + noun｜S + linking verb + adjective',
+    examples:[
+      'She is responsible.',
+      'He is an excellent employee.',
+      'The movie was interesting.',
+      'I feel tired today.',
+      'They bought a beautiful house.'
+    ],
+    tips:'形容詞不能直接當一般動詞使用。'
+  },
+  {
+    keys:['pronoun','代名詞'],
+    title:'代名詞 Pronoun',
+    body:'代名詞用來代替名詞，避免重複。',
+    formula:'noun → pronoun',
+    examples:[
+      'Tom is my friend. He is nice.',
+      'Lisa called me. She sounded happy.',
+      'The books are new. They are expensive.',
+      'I saw John and talked to him.',
+      'This bag is mine.'
+    ],
+    tips:'主格、受格、所有格代名詞的位置和功能不同。'
+  },
+  {
+    keys:['object','受詞'],
+    title:'受詞 Object',
+    body:'受詞是接受動作的人或事物，通常放在及物動詞後面。',
+    formula:'S + V + O',
+    examples:[
+      'She supervises employees.',
+      'I like music.',
+      'He called me.',
+      'We watched the movie.',
+      'They finished the project.'
+    ],
+    tips:'受詞可以是名詞、代名詞、名詞片語等。'
+  }
+];
+
+function findGrammarEntry(q){
+  const key=q.toLowerCase().trim();
+  return grammarLibrary.find(g=>
+    g.keys.some(k=>key.includes(k.toLowerCase()) || k.toLowerCase().includes(key))
+  );
+}
+
+$('#lookupGrammar').onclick=()=>{
+  const q=$('#newGTitle').value.trim();
+
+  if(!q){
+    alert('請先輸入文法名稱，例如：現在完成式 或 Present Perfect。');
+    return;
+  }
+
+  const g=findGrammarEntry(q);
+
+  if(!g){
+    $('#grammarLookupStatus').textContent=
+      '❌ 目前內建資料庫找不到這個文法。你可以自己填，或按「🤖 給 ChatGPT 檢查」確認。';
+    $('#grammarLookupResults').innerHTML='';
+    return;
+  }
+
+  $('#grammarLookupStatus').textContent=
+    '✅ 找到了。下面有解釋、公式和多個例句。';
+
+  $('#grammarLookupResults').innerHTML=`
+    <div class="lookup-card">
+      <h4>${escapeHtml(g.title)}</h4>
+      <p>${escapeHtml(g.body)}</p>
+      <div class="formula">${escapeHtml(g.formula)}</div>
+      <div class="example">
+        <b>其他例句：</b><br>
+        ${g.examples.map((x,i)=>`${i+1}. ${escapeHtml(x)}`).join('<br>')}
+      </div>
+      <div class="lookup-en" style="margin-top:8px">
+        💡 ${escapeHtml(g.tips)}
+      </div>
+      <div class="form-actions">
+        <button id="applyGrammarLookup" type="button">✅ 套用這份文法</button>
+        <button id="hearGrammarLookup" type="button">🔊 聽例句</button>
+      </div>
+    </div>
+  `;
+
+  $('#applyGrammarLookup').onclick=()=>{
+    $('#newGTitle').value=g.title;
+    $('#newGBody').value=g.body + (g.tips ? '\n提醒：'+g.tips : '');
+    $('#newGFormula').value=g.formula;
+    $('#newGExample').value=g.examples.join('\n');
+
+    $('#grammarLookupStatus').textContent=
+      '✅ 已自動填入文法解釋、公式和多個例句。';
+  };
+
+  $('#hearGrammarLookup').onclick=async()=>{
+    speechSynthesis.cancel();
+    for(const ex of g.examples){
+      await speak(ex,state.accent,.7);
+    }
+  };
+};
+
+
+function basicGrammarCheck(){
+  const title=$('#newGTitle').value.trim();
+  const body=$('#newGBody').value.trim();
+  const formula=$('#newGFormula').value.trim();
+  const example=$('#newGExample').value.trim();
+  const problems=[];
+
+  if(!title) problems.push('請填文法標題。');
+  if(!body) problems.push('尚未填中文解釋。');
+  if(!formula) problems.push('尚未填文法公式。');
+  if(!example) problems.push('尚未填例句。');
+  if(title && grammar.some(g=>g.title===title)) problems.push('這個文法標題已經存在。');
+  if(example && !/[A-Za-z]/.test(example)) problems.push('例句看起來沒有英文內容。');
+
+  $('#grammarCheckResult').textContent = problems.length
+    ? '⚠️ ' + problems.join(' ')
+    : '✅ 基本格式看起來沒問題。文法規則與例句自然度仍建議用 ChatGPT 再確認。';
+}
+
+$('#checkWord').onclick=basicWordCheck;
+$('#checkGrammar').onclick=basicGrammarCheck;
+
+$('#chatgptWord').onclick=()=>{
+  const en=$('#newEn').value.trim();
+  const pos=$('#newPos').value.trim();
+  const zh=$('#newZh').value.trim();
+  const extra=$('#newExtra').value.trim();
+
+  if(!en && !zh){
+    alert('請先輸入單字內容。');
+    return;
+  }
+
+  const prompt=`請幫我檢查這個英文單字筆記是否正確，若有錯請直接改正，並告訴我：
+1. 拼字是否正確
+2. 詞性是否正確、是否有其他常見詞性
+3. 中文意思是否準確、是否漏掉常見意思
+4. 用法／搭配是否自然
+5. 若需要，提供一個簡單例句
+
+英文：${en}
+詞性：${pos}
+中文意思：${zh}
+補充：${extra}`;
+
+  copyAndOpenChatGPT(prompt);
+};
+
+$('#chatgptGrammar').onclick=()=>{
+  const title=$('#newGTitle').value.trim();
+  const body=$('#newGBody').value.trim();
+  const formula=$('#newGFormula').value.trim();
+  const example=$('#newGExample').value.trim();
+
+  if(!title && !body && !formula && !example){
+    alert('請先輸入文法內容。');
+    return;
+  }
+
+  const prompt=`請幫我檢查這份英文文法筆記是否正確，若有錯請直接改正，並用適合英文初學者的方式說明：
+1. 文法名稱是否正確
+2. 中文解釋是否正確
+3. 公式是否正確
+4. 例句文法是否正確、是否自然
+5. 若有容易混淆的地方請提醒我
+
+文法標題：${title}
+中文解釋：${body}
+公式：${formula}
+例句：${example}`;
+
+  copyAndOpenChatGPT(prompt);
+};
+
+
+function editWord(i){
+  const w=words[i];
+  if(!w)return;
+
+  const en=prompt('英文',w.en);
+  if(en===null)return;
+
+  const pos=prompt('詞性',w.pos||'');
+  if(pos===null)return;
+
+  const zh=prompt('中文意思',w.zh||'');
+  if(zh===null)return;
+
+  const extra=prompt('補充／其他意思',w.extra||'');
+  if(extra===null)return;
+
+  const cleanEn=en.trim();
+  const cleanZh=zh.trim();
+
+  if(!cleanEn || !cleanZh){
+    alert('英文和中文意思不能空白。');
+    return;
+  }
+
+  if(words.some((x,idx)=>idx!==i && x.en.toLowerCase()===cleanEn.toLowerCase())){
     alert('這個單字已經存在。');
     return;
   }
 
-  customWords.push({
-    en,
-    pos:$('#newPos').value.trim(),
-    zh,
-    extra:$('#newExtra').value.trim()
-  });
-
-  saveCustomData();
-
-  ['#newEn','#newPos','#newZh','#newExtra'].forEach(id=>{
-    $(id).value='';
-  });
-
-  toggleForm('#wordForm',false);
-
-  render();
-
-  alert('✅ 單字已新增！');
-};
-
-$('#addGrammarBtn').onclick=()=>{
-  toggleForm('#grammarForm',true);
-  $('#newGTitle').focus();
-};
-
-$('#cancelGrammar').onclick=()=>{
-  toggleForm('#grammarForm',false);
-};
-
-$('#stopGrammar').onclick=()=>{
-  speechSynthesis.cancel();
-};
-
-$('#previewGrammar').onclick=()=>{
-  const g={
-    title:$('#newGTitle').value.trim(),
-    body:$('#newGBody').value.trim(),
-    formula:$('#newGFormula').value.trim(),
-    example:$('#newGExample').value.trim()
+  words[i]={
+    en:cleanEn,
+    pos:pos.trim(),
+    zh:cleanZh,
+    extra:extra.trim()
   };
 
-  if(g.title||g.body||g.formula||g.example){
-    speakGrammarAll(g);
-  }
-};
+  saveAllData();
+  render();
+  alert('✅ 單字已更新！');
+}
 
-$('#saveGrammar').onclick=()=>{
-  const title=$('#newGTitle').value.trim();
+function deleteWord(i){
+  const w=words[i];
+  if(!w)return;
 
-  if(!title){
-    alert('請填寫文法標題。');
+  if(!confirm(`確定要刪除「${w.en}」嗎？`))return;
+
+  words.splice(i,1);
+
+  state.known=new Set([...state.known].filter(x=>x!==i).map(x=>x>i?x-1:x));
+  state.fav=new Set([...state.fav].filter(x=>x!==i).map(x=>x>i?x-1:x));
+
+  save();
+  saveAllData();
+  render();
+}
+
+function editGrammar(i){
+  const g=grammar[i];
+  if(!g)return;
+
+  const title=prompt('文法標題',g.title||'');
+  if(title===null)return;
+
+  const body=prompt('中文解釋',g.body||'');
+  if(body===null)return;
+
+  const formula=prompt('公式',g.formula||'');
+  if(formula===null)return;
+
+  const example=prompt('例句',g.example||'');
+  if(example===null)return;
+
+  const cleanTitle=title.trim();
+
+  if(!cleanTitle){
+    alert('文法標題不能空白。');
     return;
   }
 
-  if(grammar.some(g=>g.title===title)){
+  if(grammar.some((x,idx)=>idx!==i && x.title===cleanTitle)){
     alert('這個文法標題已經存在。');
     return;
   }
 
-  customGrammar.push({
-    title,
-    tags:['自訂'],
-    body:$('#newGBody').value.trim(),
-    formula:$('#newGFormula').value.trim(),
-    example:$('#newGExample').value.trim()
-  });
+  grammar[i]={
+    title:cleanTitle,
+    tags:Array.isArray(g.tags)?g.tags:['自訂'],
+    body:body.trim(),
+    formula:formula.trim(),
+    example:example.trim()
+  };
 
-  saveCustomData();
-
-  ['#newGTitle','#newGBody','#newGFormula','#newGExample'].forEach(id=>{
-    $(id).value='';
-  });
-
-  toggleForm('#grammarForm',false);
-
+  saveAllData();
   render();
+  alert('✅ 文法已更新！');
+}
 
-  alert('✅ 文法已新增！');
-};
+function deleteGrammar(i){
+  const g=grammar[i];
+  if(!g)return;
 
-$('#importBtn').onclick=()=>{
-  $('#importFile').click();
-};
+  if(!confirm(`確定要刪除「${g.title}」嗎？`))return;
+
+  grammar.splice(i,1);
+  saveAllData();
+  render();
+}
+
+$('#importBtn').onclick=()=>$('#importFile').click();
 
 $('#importFile').onchange=async e=>{
   const file=e.target.files?.[0];
-
   if(!file)return;
-
   try{
     const data=JSON.parse(await file.text());
-
-    const newWords=
-      Array.isArray(data.words)
-      ?data.words
-      :[];
-
-    const newGrammar=
-      Array.isArray(data.grammar)
-      ?data.grammar
-      :[];
-
-    let addedW=0;
-    let addedG=0;
+    const newWords=Array.isArray(data.words)?data.words:[];
+    const newGrammar=Array.isArray(data.grammar)?data.grammar:[];
+    let addedW=0, addedG=0;
 
     for(const w of newWords){
-      if(
-        w &&
-        w.en &&
-        !words.some(
-          x=>x.en.toLowerCase()===String(w.en).toLowerCase()
-        )
-      ){
-        customWords.push({
+      if(w && w.en && !words.some(x=>x.en.toLowerCase()===String(w.en).toLowerCase())){
+        words.push({
           en:String(w.en),
           pos:String(w.pos||''),
           zh:String(w.zh||''),
           extra:String(w.extra||'')
         });
-
         addedW++;
       }
     }
 
     for(const g of newGrammar){
-      if(
-        g &&
-        g.title &&
-        !grammar.some(
-          x=>x.title===String(g.title)
-        )
-      ){
-        customGrammar.push({
+      if(g && g.title && !grammar.some(x=>x.title===String(g.title))){
+        grammar.push({
           title:String(g.title),
           tags:Array.isArray(g.tags)?g.tags.map(String):[],
           body:String(g.body||''),
           formula:String(g.formula||''),
           example:String(g.example||'')
         });
-
         addedG++;
       }
     }
 
     saveCustomData();
-
     render();
-
-    alert(
-      `匯入完成！新增 ${addedW} 個單字、${addedG} 個文法重點。`
-    );
-
+    alert(`匯入完成！新增 ${addedW} 個單字、${addedG} 個文法重點。`);
   }catch(err){
-
     alert('匯入失敗：檔案格式不正確。');
-
   }finally{
-
     e.target.value='';
-
   }
 };
 
 $('#exportBtn').onclick=()=>{
   const data={
     exportedAt:new Date().toISOString(),
-    words:customWords,
-    grammar:customGrammar
+    words:words,
+    grammar:grammar
   };
-
-  const blob=new Blob(
-    [JSON.stringify(data,null,2)],
-    {type:'application/json'}
-  );
-
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
-
   const a=document.createElement('a');
-
   a.href=url;
   a.download='english-app-backup.json';
-
   document.body.appendChild(a);
-
   a.click();
-
   a.remove();
-
-  setTimeout(()=>{
-    URL.revokeObjectURL(url);
-  },1000);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
+
 
 render();
 </script>

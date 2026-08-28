@@ -1,214 +1,1021 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#f6f7fb" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="單字書" />
-  <title>我的英文單字 App</title>
-  <style>
-    :root{
-      --bg:#f6f7fb;--card:#fff;--text:#17181d;--muted:#71737d;--line:#e7e8ee;
-      --accent:#5b5bd6;--accent-soft:#eeeeff;--good:#23875f;--bad:#c84242;--warn:#b7791f;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}
-    .app{max-width:920px;margin:0 auto;padding:18px 16px 32px}
-    .hero{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin:6px 0 16px}
-    h1{font-size:28px;margin:0 0 4px}.muted{color:var(--muted)}.small{font-size:13px}
-    .badge{background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:8px 12px;font-weight:700;white-space:nowrap}
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-    .stat,.card,.panel,.daily{background:var(--card);border:1px solid var(--line);border-radius:18px}
-    .stat{padding:12px}.stat span{display:block;color:var(--muted);font-size:12px}.stat b{font-size:22px;display:block;margin-top:3px}
-    .daily{padding:18px;margin-top:12px}
-    .daily-top{display:flex;justify-content:space-between;gap:12px;align-items:center}
-    .daily-word{font-size:34px;font-weight:800;margin:8px 0 2px}
-    .tabs,.controls,.actions{display:flex;gap:8px;flex-wrap:wrap}
-    .tabs{margin:14px 0 12px;position:sticky;top:0;background:rgba(246,247,251,.96);padding:8px 0;z-index:3}
-    button,select{font:inherit}
-    button,select{min-height:44px;border:1px solid var(--line);background:#fff;color:var(--text);border-radius:12px;padding:10px 13px}
-    button.primary{background:var(--accent);border-color:var(--accent);color:white}
-    button.active{background:var(--accent-soft);border-color:#cfcfff}
-    button.good{background:#eefaf4;border-color:#cbead9;color:var(--good)}
-    button.bad{background:#fff1f1;border-color:#f0caca;color:var(--bad)}
-    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    .card{padding:16px}.word{font-size:26px;font-weight:800}.pos{font-size:14px;color:var(--muted);margin-top:3px}
-    .zh{font-size:18px;margin-top:8px}.extra{font-size:14px;color:var(--muted);line-height:1.5;margin-top:6px}
-    .panel{padding:18px}.center{text-align:center}.big{font-size:38px;font-weight:800;margin:10px 0}
-    .hidden{display:none!important}.feedback{min-height:24px;font-weight:700;margin-top:10px}.status{font-size:13px;color:var(--muted);margin-top:14px}
-    .progress-wrap{height:10px;background:#ececf2;border-radius:999px;overflow:hidden;margin-top:8px}
-    .progress-bar{height:100%;background:var(--accent);width:0%}
-    .section-title{font-size:18px;font-weight:800;margin:6px 0 10px}
-    .empty{padding:20px;text-align:center;color:var(--muted)}
-    .note{font-size:12px;color:var(--muted);line-height:1.6;margin-top:16px}
-    @media(max-width:700px){
-      .grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}
-      .hero{align-items:center}.daily-word{font-size:30px}
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#f6f7fb" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="英文學習" />
+<title>我的英文學習 App</title>
+
+<style>
+:root{
+  --bg:#f6f7fb;
+  --card:#fff;
+  --text:#17181d;
+  --muted:#71737d;
+  --line:#e7e8ee;
+  --accent:#5b5bd6;
+  --soft:#eeeeff;
+  --good:#23875f;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;
+}
+
+.app{
+  max-width:920px;
+  margin:auto;
+  padding:18px 16px 36px;
+}
+
+.hero{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:flex-start;
+}
+
+.hero h1{
+  margin:0;
+  font-size:28px;
+}
+
+.muted{color:var(--muted)}
+.small{font-size:13px}
+
+.badge{
+  background:var(--soft);
+  color:var(--accent);
+  padding:8px 12px;
+  border-radius:999px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+  margin-top:16px;
+}
+
+.stat,.card,.panel,.daily,.grammar-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+}
+
+.stat{padding:12px}
+
+.stat span{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.stat b{font-size:22px}
+
+.daily{
+  padding:18px;
+  margin-top:12px;
+}
+
+.daily-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+}
+
+.daily-word{
+  font-size:34px;
+  font-weight:850;
+  margin:6px 0;
+}
+
+.pos{
+  font-size:14px;
+  color:var(--muted);
+}
+
+.zh{
+  font-size:18px;
+  margin-top:7px;
+}
+
+.extra{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.55;
+  margin-top:5px;
+}
+
+.tabs,.controls,.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.tabs{
+  margin:14px 0 12px;
+  position:sticky;
+  top:0;
+  z-index:5;
+  background:rgba(246,247,251,.96);
+  padding:8px 0;
+}
+
+button{
+  font:inherit;
+  min-height:44px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--text);
+  border-radius:12px;
+  padding:10px 13px;
+}
+
+button.active,button.primary{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+}
+
+button.good{
+  background:#eefaf4;
+  color:var(--good);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.card{padding:16px}
+
+.word{
+  font-size:26px;
+  font-weight:850;
+}
+
+.actions{margin-top:12px}
+
+.hidden{display:none!important}
+
+.panel{padding:18px}
+
+.big{
+  font-size:38px;
+  font-weight:850;
+}
+
+.section-title{
+  font-size:20px;
+  font-weight:850;
+  margin:8px 0 12px;
+}
+
+.grammar-list{
+  display:grid;
+  gap:12px;
+}
+
+.grammar-card{padding:17px}
+
+.grammar-card h3{
+  margin:0 0 8px;
+  font-size:20px;
+}
+
+.grammar-card p{
+  margin:6px 0;
+  line-height:1.65;
+}
+
+.formula{
+  background:var(--soft);
+  padding:10px 12px;
+  border-radius:12px;
+  margin-top:9px;
+  font-weight:700;
+}
+
+.example{
+  border-left:4px solid var(--accent);
+  padding:8px 12px;
+  margin-top:10px;
+  background:#fafaff;
+  border-radius:8px;
+}
+
+.tag{
+  display:inline-block;
+  background:#f0f1f5;
+  border-radius:999px;
+  padding:4px 8px;
+  font-size:12px;
+  margin-right:5px;
+}
+
+.note{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.6;
+  margin-top:16px;
+}
+
+.feedback{
+  min-height:26px;
+  font-weight:800;
+  margin-top:10px;
+}
+
+@media(max-width:700px){
+  .stats{grid-template-columns:1fr 1fr}
+  .grid{grid-template-columns:1fr}
+  .daily-top{align-items:flex-start}
+  .daily-word{font-size:30px}
+}
+</style>
 </head>
+
 <body>
 <main class="app">
-  <section class="hero">
+
+<section class="hero">
+  <div>
+    <h1>我的英文學習 App</h1>
+    <div class="muted">單字＋文法一起複習</div>
+  </div>
+  <div class="badge">🇬🇧 英國腔</div>
+</section>
+
+<section class="stats">
+  <div class="stat">
+    <span>總單字</span>
+    <b id="totalCount">0</b>
+  </div>
+  <div class="stat">
+    <span>已熟悉</span>
+    <b id="knownCount">0</b>
+  </div>
+  <div class="stat">
+    <span>收藏</span>
+    <b id="favCount">0</b>
+  </div>
+  <div class="stat">
+    <span>文法重點</span>
+    <b id="grammarCount">0</b>
+  </div>
+</section>
+
+<section class="daily">
+  <div class="daily-top">
     <div>
-      <h1>我的英文單字 App</h1>
-      <div class="muted">每天一點點，累積自己的單字庫。</div>
+      <div class="small muted">今日單字</div>
+      <div id="dailyWord" class="daily-word"></div>
+      <div id="dailyPos" class="pos"></div>
+      <div id="dailyZh" class="zh"></div>
+      <div id="dailyExtra" class="extra"></div>
     </div>
-    <div class="badge">IELTS 基礎</div>
-  </section>
+    <button id="dailySpeak" class="primary">🔊 聽發音</button>
+  </div>
+</section>
 
-  <section class="stats">
-    <div class="stat"><span>總單字</span><b id="totalCount">16</b></div>
-    <div class="stat"><span>已熟悉</span><b id="knownCount">0</b></div>
-    <div class="stat"><span>收藏</span><b id="favCount">0</b></div>
-    <div class="stat"><span>錯題</span><b id="wrongCount">0</b></div>
-  </section>
+<nav class="tabs">
+  <button class="tab active" data-tab="words">📚 單字</button>
+  <button class="tab" data-tab="grammar">📖 文法</button>
+  <button class="tab" data-tab="quiz">📝 測驗</button>
+  <button class="tab" data-tab="favorites">⭐ 收藏</button>
+</nav>
 
-  <section class="daily">
-    <div class="daily-top">
-      <div>
-        <div class="small muted">今日單字</div>
-        <div id="dailyWord" class="daily-word"></div>
-        <div id="dailyPos" class="pos"></div>
-        <div id="dailyZh" class="zh"></div>
-        <div id="dailyExtra" class="extra"></div>
-      </div>
-      <button id="dailySpeak" class="primary">🔊 聽發音</button>
+<section id="words" class="view">
+  <div class="controls" style="margin-bottom:12px">
+    <button id="playAll">▶ 全部朗讀</button>
+    <button id="stopAll">■ 停止</button>
+  </div>
+  <div id="wordList" class="grid"></div>
+</section>
+
+<section id="grammar" class="view hidden">
+  <div class="section-title">你的筆記：文法重點</div>
+  <div id="grammarList" class="grammar-list"></div>
+</section>
+
+<section id="quiz" class="view hidden">
+  <div class="panel">
+    <div class="muted">這個英文是什麼意思？</div>
+    <div id="quizWord" class="big"></div>
+
+    <button id="quizSpeak">🔊 英國腔</button>
+
+    <div id="quizOptions"
+         style="display:grid;gap:8px;margin-top:14px">
     </div>
-    <div class="small muted" style="margin-top:12px">學習進度</div>
-    <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
-    <div id="progressText" class="small muted" style="margin-top:6px"></div>
-  </section>
 
-  <nav class="tabs">
-    <button class="tab active" data-tab="learn">📚 單字</button>
-    <button class="tab" data-tab="review">🔀 複習</button>
-    <button class="tab" data-tab="quiz">📝 測驗</button>
-    <button class="tab" data-tab="wrong">❌ 錯題本</button>
-    <button class="tab" data-tab="favorites">⭐ 收藏</button>
-  </nav>
+    <div id="quizFeedback" class="feedback"></div>
 
-  <section id="learn" class="view">
-    <div class="controls" style="margin-bottom:12px">
-      <button id="playAll">▶ 全部朗讀</button>
-      <button id="stopAll">■ 停止</button>
-      <select id="displayMode">
-        <option value="all">顯示全部</option>
-        <option value="english">只看英文</option>
-        <option value="chinese">只看中文</option>
-      </select>
-    </div>
-    <div id="wordList" class="grid"></div>
-  </section>
+    <button id="nextQuiz"
+            class="primary">
+      下一題
+    </button>
+  </div>
+</section>
 
-  <section id="review" class="view hidden"><div id="reviewCard" class="panel center"></div></section>
+<section id="favorites" class="view hidden">
+  <div class="section-title">我的收藏</div>
+  <div id="favoritesList" class="grid"></div>
+</section>
 
-  <section id="quiz" class="view hidden">
-    <div class="panel">
-      <div class="muted">這個英文是什麼意思？</div>
-      <div id="quizWord" class="big"></div>
-      <button id="quizSpeak">🔊 聽發音</button>
-      <div id="quizOptions" style="display:grid;gap:8px;margin-top:14px"></div>
-      <div id="quizFeedback" class="feedback"></div>
-      <button id="nextQuiz" class="primary" style="margin-top:8px">下一題</button>
-    </div>
-  </section>
+<div class="note">
+iPhone Safari 可按「分享」→「加入主畫面」。
+收藏與熟悉狀態會儲存在目前瀏覽器。
+</div>
 
-  <section id="wrong" class="view hidden">
-    <div class="section-title">錯題本</div>
-    <div id="wrongList" class="grid"></div>
-  </section>
-
-  <section id="favorites" class="view hidden">
-    <div class="section-title">我的收藏</div>
-    <div id="favoritesList" class="grid"></div>
-  </section>
-
-  <div id="status" class="status">準備好了。</div>
-  <div class="note">提示：iPhone 用 Safari 開啟後，可按「分享」→「加入主畫面」，之後就會像 App 一樣從桌面打開。學習進度、收藏、熟悉與錯題會儲存在這個瀏覽器裡。</div>
 </main>
 
 <script>
+
 const words=[
-{en:'complains',pos:'動詞',zh:'抱怨',extra:'complain 的第三人稱單數'},
-{en:'made',pos:'動詞／形容詞',zh:'製造了；做成的',extra:'make 的過去式／過去分詞；也常見於 well-made 等形容詞用法'},
-{en:'supervises',pos:'動詞',zh:'監督、管理',extra:'supervise 的第三人稱單數'},
-{en:'responsible',pos:'形容詞',zh:'負責任的；需負責的',extra:'be responsible for = 對……負責'},
-{en:'become',pos:'動詞',zh:'變成、成為',extra:'常作連綴動詞'},
-{en:'stays',pos:'動詞',zh:'保持；停留',extra:'stay 的第三人稱單數'},
-{en:'calm',pos:'形容詞／動詞',zh:'冷靜的；使平靜',extra:'stay calm = 保持冷靜'},
-{en:'seems',pos:'動詞',zh:'似乎、看起來',extra:'seem 的第三人稱單數'},
-{en:'stressed',pos:'形容詞',zh:'有壓力的、焦慮的',extra:'feel stressed = 感到有壓力'},
-{en:'crises',pos:'名詞',zh:'危機（複數）',extra:'單數是 crisis'},
-{en:'occur',pos:'動詞',zh:'發生、出現',extra:'較正式，意思接近 happen'},
-{en:'figures',pos:'名詞／動詞',zh:'數字、數據；人物；認為、計算',extra:'figure 的複數或第三人稱單數'},
-{en:'quarter',pos:'名詞',zh:'季度；四分之一',extra:'a quarter = 四分之一'},
-{en:'capable',pos:'形容詞',zh:'有能力的、有本事的',extra:'be capable of + V-ing'},
-{en:'employee',pos:'名詞',zh:'員工、受僱者',extra:'employer = 雇主'},
-{en:'excellent',pos:'形容詞',zh:'優秀的、極好的',extra:'excellent work = 優秀的工作表現'}];
 
-const loadSet=k=>new Set(JSON.parse(localStorage.getItem(k)||'[]'));
-const state={favorites:loadSet('v2Fav'),known:loadSet('v2Known'),wrong:loadSet('v2Wrong'),display:'all',quizIndex:0,answered:false};
+{
+en:'complains',
+pos:'動詞 v.',
+zh:'抱怨',
+extra:'complain 的第三人稱單數；complain about = 抱怨……'
+},
+
+{
+en:'made',
+pos:'動詞 v.／形容詞 adj.',
+zh:'製造了、做了；製成的',
+extra:'make 的過去式／過去分詞；made 也可表示「製成的」'
+},
+
+{
+en:'supervises',
+pos:'動詞 v.',
+zh:'監督、管理',
+extra:'supervise 的第三人稱單數'
+},
+
+{
+en:'responsible',
+pos:'形容詞 adj.',
+zh:'負責任的；需負責的',
+extra:'be responsible for = 對……負責'
+},
+
+{
+en:'become',
+pos:'連綴動詞／不及物動詞',
+zh:'變成、成為',
+extra:'常接形容詞或名詞作主詞補語，例如 become tired'
+},
+
+{
+en:'stays',
+pos:'動詞 v.',
+zh:'停留、保持、住宿',
+extra:'stay calm = 保持冷靜；stay 也可表示住宿'
+},
+
+{
+en:'calm',
+pos:'形容詞 adj.／動詞 v.／名詞 n.',
+zh:'平靜的；使平靜；平靜',
+extra:'stay calm = 保持冷靜；calm down = 冷靜下來'
+},
+
+{
+en:'seems',
+pos:'連綴動詞 v.',
+zh:'似乎、看起來',
+extra:'seem 的第三人稱單數；seem + adj.'
+},
+
+{
+en:'stressed',
+pos:'形容詞 adj.',
+zh:'有壓力的、緊張的',
+extra:'feel stressed = 感到有壓力'
+},
+
+{
+en:'crises',
+pos:'名詞 n.',
+zh:'危機（複數）',
+extra:'單數 crisis；複數 crises'
+},
+
+{
+en:'occur',
+pos:'不及物動詞 v.',
+zh:'發生、出現',
+extra:'較正式，意思接近 happen'
+},
+
+{
+en:'figures',
+pos:'名詞 n.／動詞 v.',
+zh:'數字、數據、人物；認為、計算',
+extra:'figure 的複數或第三人稱單數'
+},
+
+{
+en:'quarter',
+pos:'名詞 n.／動詞 v.',
+zh:'季度、四分之一；把……分成四份',
+extra:'a quarter = 四分之一'
+},
+
+{
+en:'capable',
+pos:'形容詞 adj.',
+zh:'有能力的、有本事的',
+extra:'be capable of + V-ing = 有能力做……'
+},
+
+{
+en:'employee',
+pos:'名詞 n.',
+zh:'員工、受僱者',
+extra:'employer = 雇主；employment = 就業'
+},
+
+{
+en:'excellent',
+pos:'形容詞 adj.',
+zh:'優秀的、極好的',
+extra:'excellent work = 優秀的工作表現'
+}
+
+];
+
+const grammar=[
+
+{
+title:'可數名詞 Countable Nouns',
+tags:['名詞 n.'],
+body:'可以數出一個、兩個、三個的名詞。可數名詞有單數和複數。',
+formula:'單數：a / an + 名詞｜複數：名詞 + s / es',
+example:'a book → two books；an employee → three employees'
+},
+
+{
+title:'名詞 Noun',
+tags:['n.'],
+body:'名詞用來表示人、事物、地方或概念。',
+formula:'人／事物／地方／概念 = 名詞',
+example:'employee 員工、quarter 季度、crisis 危機'
+},
+
+{
+title:'動詞 Verb',
+tags:['v.'],
+body:'動詞用來表示動作、發生的事情或狀態。',
+formula:'主詞 + 動詞',
+example:'Crises occur. = 危機發生。'
+},
+
+{
+title:'受詞 Object',
+tags:['句子結構'],
+body:'受詞是接受動作的人或事物。通常放在及物動詞後面。',
+formula:'主詞 + 動詞 + 受詞',
+example:'She supervises employees. → employees 是受詞'
+},
+
+{
+title:'及物動詞 Transitive Verb',
+tags:['及物 v.'],
+body:'及物動詞後面可以直接接受詞。',
+formula:'主詞 + 及物動詞 + 受詞',
+example:'She supervises employees.'
+},
+
+{
+title:'不及物動詞 Intransitive Verb',
+tags:['不及物 v.'],
+body:'不及物動詞後面不能直接接受詞。',
+formula:'主詞 + 不及物動詞',
+example:'Crises occur. → occur 後面不需要受詞'
+},
+
+{
+title:'連綴動詞 Linking Verb',
+tags:['連綴 v.'],
+body:'連綴動詞不是表示真正的動作，而是連接主詞和後面的補語。',
+formula:'主詞 + 連綴動詞 + 主詞補語',
+example:'She is beautiful.'
+},
+
+{
+title:'主詞補語 Subject Complement',
+tags:['補語'],
+body:'主詞補語用來補充說明主詞是什麼或怎麼樣。',
+formula:'主詞 + 連綴動詞 + 主詞補語',
+example:'She is beautiful. → beautiful 描述 She'
+},
+
+{
+title:'形容詞 Adjective',
+tags:['adj.'],
+body:'形容詞用來描述名詞，也可以放在連綴動詞後面描述主詞。',
+formula:'形容詞 + 名詞｜主詞 + 連綴動詞 + 形容詞',
+example:'an excellent employee；She is responsible.'
+},
+
+{
+title:'代名詞 Pronoun',
+tags:['pron.'],
+body:'代名詞用來代替名詞，避免一直重複同一個人或事物。',
+formula:'名詞 → 代名詞',
+example:'Tom is my friend. He is nice. → He 代替 Tom'
+},
+
+{
+title:'一般動詞 Action Verb',
+tags:['一般動詞'],
+body:'一般動詞通常表示實際動作或行為，例如工作、吃、跑、管理。',
+formula:'主詞 + 一般動詞',
+example:'She supervises employees.'
+}
+
+];
+
 const $=s=>document.querySelector(s);
-const save=()=>{localStorage.setItem('v2Fav',JSON.stringify([...state.favorites]));localStorage.setItem('v2Known',JSON.stringify([...state.known]));localStorage.setItem('v2Wrong',JSON.stringify([...state.wrong]));};
 
-function speak(text,lang='en-US',rate=.78){return new Promise(resolve=>{if(!('speechSynthesis'in window)){resolve();return}const u=new SpeechSynthesisUtterance(text);u.lang=lang;u.rate=rate;u.onend=resolve;u.onerror=resolve;speechSynthesis.speak(u);});}
-async function speakFull(w){speechSynthesis.cancel();$('#status').textContent='正在朗讀：'+w.en;await speak(w.en,'en-US',.7);await speak(w.pos,'zh-TW',.9);await speak(w.zh,'zh-TW',.9);$('#status').textContent='完成：'+w.en;}
+const loadSet=k=>
+new Set(
+JSON.parse(localStorage.getItem(k)||'[]')
+);
+
+const state={
+known:loadSet('known3'),
+fav:loadSet('fav3')
+};
+
+function save(){
+localStorage.setItem(
+'known3',
+JSON.stringify([...state.known])
+);
+
+localStorage.setItem(
+'fav3',
+JSON.stringify([...state.fav])
+);
+}
+
+function speak(text,lang='en-GB',rate=.72){
+
+return new Promise(resolve=>{
+
+if(!('speechSynthesis' in window)){
+resolve();
+return;
+}
+
+const u=
+new SpeechSynthesisUtterance(text);
+
+u.lang=lang;
+u.rate=rate;
+
+const voices=
+speechSynthesis.getVoices();
+
+const gb=
+voices.find(v=>
+v.lang &&
+v.lang.toLowerCase().startsWith('en-gb')
+);
+
+if(gb)u.voice=gb;
+
+u.onend=resolve;
+u.onerror=resolve;
+
+speechSynthesis.speak(u);
+
+});
+
+}
+
+async function speakFull(w){
+
+speechSynthesis.cancel();
+
+await speak(
+w.en,
+'en-GB',
+.68
+);
+
+await speak(
+w.pos,
+'zh-TW',
+.9
+);
+
+await speak(
+w.zh,
+'zh-TW',
+.9
+);
+
+}
 
 function updateStats(){
-  $('#totalCount').textContent=words.length;$('#knownCount').textContent=state.known.size;$('#favCount').textContent=state.favorites.size;$('#wrongCount').textContent=state.wrong.size;
-  const pct=Math.round(state.known.size/words.length*100);$('#progressBar').style.width=pct+'%';$('#progressText').textContent=`已熟悉 ${state.known.size} / ${words.length} 個單字（${pct}%）`;
-}
-function dailyIndex(){const d=new Date();const key=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();return key%words.length;}
-function renderDaily(){const w=words[dailyIndex()];$('#dailyWord').textContent=w.en;$('#dailyPos').textContent=w.pos;$('#dailyZh').textContent=w.zh;$('#dailyExtra').textContent=w.extra;$('#dailySpeak').onclick=()=>{speechSynthesis.cancel();speakFull(w)};}
 
-function cardHTML(w,i){
- const fav=state.favorites.has(i),known=state.known.has(i),showEn=state.display!=='chinese',showZh=state.display!=='english';
- return `<article class="card">
- <button class="full" data-i="${i}" style="width:100%;text-align:left;border:0;padding:0;background:transparent">
- ${showEn?`<div class="word">${w.en}</div><div class="pos">${w.pos}</div>`:''}
- ${showZh?`<div class="zh">${w.zh}</div>`:''}
- ${showZh&&state.display==='all'?`<div class="extra">${w.extra}</div>`:''}
- </button>
- <div class="actions"><button class="en" data-i="${i}">🔊 英文</button><button class="fav" data-i="${i}">${fav?'★ 已收藏':'☆ 收藏'}</button><button class="known ${known?'good':''}" data-i="${i}">${known?'✓ 已熟悉':'○ 還在學'}</button></div>
- </article>`;
-}
-function bindCards(box){
- box.querySelectorAll('.full').forEach(b=>b.onclick=()=>speakFull(words[+b.dataset.i]));
- box.querySelectorAll('.en').forEach(b=>b.onclick=()=>{speechSynthesis.cancel();speak(words[+b.dataset.i].en,'en-US',.68)});
- box.querySelectorAll('.fav').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;state.favorites.has(i)?state.favorites.delete(i):state.favorites.add(i);save();renderAll();});
- box.querySelectorAll('.known').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;state.known.has(i)?state.known.delete(i):state.known.add(i);save();renderAll();});
-}
-function renderLearn(){const box=$('#wordList');box.innerHTML=words.map(cardHTML).join('');bindCards(box);}
-function renderFavorites(){const ids=[...state.favorites],box=$('#favoritesList');box.innerHTML=ids.length?ids.map(i=>cardHTML(words[i],i)).join(''):'<div class="panel empty">目前沒有收藏單字。</div>';bindCards(box);}
-function renderWrong(){const ids=[...state.wrong],box=$('#wrongList');box.innerHTML=ids.length?ids.map(i=>cardHTML(words[i],i)).join(''):'<div class="panel empty">太棒了，目前沒有錯題。</div>';bindCards(box);}
+$('#totalCount').textContent=
+words.length;
 
-function renderReview(){
- const pool=words.map((_,i)=>i).filter(i=>!state.known.has(i));const list=pool.length?pool:words.map((_,i)=>i);const i=list[Math.floor(Math.random()*list.length)],w=words[i];
- $('#reviewCard').innerHTML=`<div class="muted">隨機複習</div><div class="big">${w.en}</div><div class="pos">${w.pos}</div><div id="reviewAnswer" class="hidden"><div class="zh">${w.zh}</div><div class="extra">${w.extra}</div></div><div class="actions" style="justify-content:center;margin-top:16px"><button id="reviewSpeak">🔊 發音</button><button id="showAnswer" class="primary">看答案</button><button id="nextReview">下一個</button></div>`;
- $('#reviewSpeak').onclick=()=>{speechSynthesis.cancel();speak(w.en,'en-US',.68)};$('#showAnswer').onclick=()=>$('#reviewAnswer').classList.remove('hidden');$('#nextReview').onclick=renderReview;
-}
-function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
-function renderQuiz(){
- state.answered=false;const correct=Math.floor(Math.random()*words.length);state.quizIndex=correct;const others=shuffle(words.map((_,i)=>i).filter(i=>i!==correct)).slice(0,3),opts=shuffle([correct,...others]);
- $('#quizWord').textContent=words[correct].en;$('#quizFeedback').textContent='';$('#quizOptions').innerHTML=opts.map(i=>`<button class="qopt" data-i="${i}">${words[i].zh}</button>`).join('');
- document.querySelectorAll('.qopt').forEach(b=>b.onclick=()=>{if(state.answered)return;state.answered=true;const pick=+b.dataset.i,ok=pick===correct;if(ok){state.known.add(correct);state.wrong.delete(correct);$('#quizFeedback').textContent='✅ 答對了！';$('#quizFeedback').style.color='var(--good)';}else{state.wrong.add(correct);$('#quizFeedback').textContent='❌ 答錯了，答案是：'+words[correct].zh;$('#quizFeedback').style.color='var(--bad)';}save();renderAll();});
-}
-function renderAll(){renderLearn();renderFavorites();renderWrong();updateStats();}
+$('#knownCount').textContent=
+state.known.size;
 
-document.querySelectorAll('.tab').forEach(btn=>btn.onclick=()=>{
- document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
- document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));$('#'+btn.dataset.tab).classList.remove('hidden');
- if(btn.dataset.tab==='review')renderReview();if(btn.dataset.tab==='quiz')renderQuiz();if(btn.dataset.tab==='wrong')renderWrong();if(btn.dataset.tab==='favorites')renderFavorites();
+$('#favCount').textContent=
+state.fav.size;
+
+$('#grammarCount').textContent=
+grammar.length;
+
+}
+
+function wordCard(w,i){
+
+return `
+<article class="card">
+
+<button
+class="full"
+data-i="${i}"
+style="
+width:100%;
+text-align:left;
+border:0;
+padding:0;
+background:transparent
+">
+
+<div class="word">
+${w.en}
+</div>
+
+<div class="pos">
+${w.pos}
+</div>
+
+<div class="zh">
+${w.zh}
+</div>
+
+<div class="extra">
+${w.extra}
+</div>
+
+</button>
+
+<div class="actions">
+
+<button
+class="speak"
+data-i="${i}">
+🔊 英國腔
+</button>
+
+<button
+class="fav"
+data-i="${i}">
+${state.fav.has(i)
+?'★ 已收藏'
+:'☆ 收藏'}
+</button>
+
+<button
+class="known ${state.known.has(i)?'good':''}"
+data-i="${i}">
+${state.known.has(i)
+?'✓ 已熟悉'
+:'○ 還在學'}
+</button>
+
+</div>
+</article>
+`;
+
+}
+
+function bind(box){
+
+box.querySelectorAll('.full')
+.forEach(b=>{
+
+b.onclick=()=>{
+
+speakFull(
+words[+b.dataset.i]
+);
+
+};
+
 });
-$('#displayMode').onchange=e=>{state.display=e.target.value;renderLearn()};
-$('#stopAll').onclick=()=>{if('speechSynthesis'in window)speechSynthesis.cancel();$('#status').textContent='已停止朗讀'};
-$('#playAll').onclick=async()=>{if('speechSynthesis'in window)speechSynthesis.cancel();for(const w of words){await speak(w.en,'en-US',.7);await speak(w.pos,'zh-TW',.9);await speak(w.zh,'zh-TW',.9)}$('#status').textContent='全部朗讀完成 ✓';};
-$('#quizSpeak').onclick=()=>{if('speechSynthesis'in window)speechSynthesis.cancel();speak(words[state.quizIndex].en,'en-US',.68)};$('#nextQuiz').onclick=renderQuiz;
 
-renderDaily();renderAll();renderQuiz();
+box.querySelectorAll('.speak')
+.forEach(b=>{
+
+b.onclick=()=>{
+
+speechSynthesis.cancel();
+
+speak(
+words[+b.dataset.i].en
+);
+
+};
+
+});
+
+box.querySelectorAll('.fav')
+.forEach(b=>{
+
+b.onclick=()=>{
+
+let i=+b.dataset.i;
+
+state.fav.has(i)
+?state.fav.delete(i)
+:state.fav.add(i);
+
+save();
+
+render();
+
+};
+
+});
+
+box.querySelectorAll('.known')
+.forEach(b=>{
+
+b.onclick=()=>{
+
+let i=+b.dataset.i;
+
+state.known.has(i)
+?state.known.delete(i)
+:state.known.add(i);
+
+save();
+
+render();
+
+};
+
+});
+
+}
+
+function renderWords(){
+
+const b=$('#wordList');
+
+b.innerHTML=
+words.map(wordCard).join('');
+
+bind(b);
+
+}
+
+function renderFav(){
+
+const ids=[...state.fav];
+
+const b=$('#favoritesList');
+
+b.innerHTML=
+ids.length
+?ids.map(i=>wordCard(words[i],i)).join('')
+:'<div class="panel muted">還沒有收藏單字。</div>';
+
+bind(b);
+
+}
+
+function renderGrammar(){
+
+$('#grammarList').innerHTML=
+grammar.map(g=>`
+
+<article class="grammar-card">
+
+<h3>${g.title}</h3>
+
+<div>
+${g.tags
+.map(t=>`<span class="tag">${t}</span>`)
+.join('')}
+</div>
+
+<p>${g.body}</p>
+
+<div class="formula">
+${g.formula}
+</div>
+
+<div class="example">
+<b>例：</b>
+${g.example}
+</div>
+
+</article>
+
+`).join('');
+
+}
+
+function daily(){
+
+const d=new Date();
+
+const i=
+(
+d.getFullYear()*10000+
+(d.getMonth()+1)*100+
+d.getDate()
+)%words.length;
+
+const w=words[i];
+
+$('#dailyWord').textContent=w.en;
+$('#dailyPos').textContent=w.pos;
+$('#dailyZh').textContent=w.zh;
+$('#dailyExtra').textContent=w.extra;
+
+$('#dailySpeak').onclick=
+()=>speakFull(w);
+
+}
+
+function quiz(){
+
+const correct=
+Math.floor(
+Math.random()*words.length
+);
+
+const w=
+words[correct];
+
+$('#quizWord').textContent=
+w.en;
+
+$('#quizFeedback').textContent='';
+
+let ids=[correct];
+
+while(ids.length<4){
+
+let x=
+Math.floor(
+Math.random()*words.length
+);
+
+if(!ids.includes(x)){
+ids.push(x);
+}
+
+}
+
+ids.sort(
+()=>Math.random()-.5
+);
+
+$('#quizOptions').innerHTML=
+
+ids.map(i=>
+
+`<button data-i="${i}">
+${words[i].zh}
+</button>`
+
+).join('');
+
+let answered=false;
+
+$('#quizOptions')
+.querySelectorAll('button')
+.forEach(b=>{
+
+b.onclick=()=>{
+
+if(answered)return;
+
+answered=true;
+
+const ok=
++b.dataset.i===correct;
+
+$('#quizFeedback').textContent=
+ok
+?'✅ 答對了！'
+:'❌ 正確答案：'+w.zh;
+
+};
+
+});
+
+$('#quizSpeak').onclick=()=>{
+
+speechSynthesis.cancel();
+
+speak(w.en);
+
+};
+
+}
+
+function render(){
+
+updateStats();
+
+renderWords();
+
+renderFav();
+
+renderGrammar();
+
+daily();
+
+}
+
+document
+.querySelectorAll('.tab')
+.forEach(b=>{
+
+b.onclick=()=>{
+
+document
+.querySelectorAll('.tab')
+.forEach(x=>
+x.classList.remove('active')
+);
+
+b.classList.add('active');
+
+document
+.querySelectorAll('.view')
+.forEach(v=>
+v.classList.add('hidden')
+);
+
+$('#'+b.dataset.tab)
+.classList.remove('hidden');
+
+if(b.dataset.tab==='quiz'){
+quiz();
+}
+
+};
+
+});
+
+$('#playAll').onclick=
+async()=>{
+
+speechSynthesis.cancel();
+
+for(const w of words){
+
+await speak(
+w.en,
+'en-GB',
+.66
+);
+
+}
+
+};
+
+$('#stopAll').onclick=
+()=>speechSynthesis.cancel();
+
+$('#nextQuiz').onclick=
+quiz;
+
+render();
+
 </script>
 </body>
 </html>
+  
+ 
